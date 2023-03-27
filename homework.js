@@ -8,7 +8,7 @@
           acc.push(num);
         }
         return acc;
-      }, );
+      }, []); 
       
     console.log(naturalNumbers1);
     console.log(naturalNumbers2);
@@ -52,4 +52,27 @@
 // // 4) შექმენით ფუნქცია addAsync,რომელიც იღებს ორ პარამეტრს და აბრუნებს პრომისს. თუ ორივე პარამეტრი
 //  გადაეცემა(undefined არ არის და ორივე პარამეტრი რიცხვია) პრომისი უნდა დარიზოლვდეს(resolve), წინააღმდეგ 
 //  შემთხვევაში დარიჯექთდეს(reject). გამოიძახეთ ფუნქცია რამდენიმეჯერ, სხვადასხვა პარამეტრით და კონსოლში გამოიტანეთ შედეგი.
+      function addAsync(p1, p2) {
+        return new Promise((resolve, reject) => {
+          if (typeof p1 === 'number' && typeof p1 !== undefined && typeof p2 === 'number' && typeof p2 !== undefined) {
+            resolve('kibatono');
+          } else {
+            reject('arabatono');
+          }
+        });
+      }
+      addAsync(7,9)
+      .then((result) => console.log(result))
+      .catch((error) => console.error(error));
 
+
+      addAsync("7", "9")
+      .then((result) => console.log(result))
+      .catch((error) => console.error(error));
+
+      addAsync(7, null)
+      .then((result) => console.log(result))
+      .catch((error) => console.error(error));
+      addAsync(7)
+      .then((result) => console.log(result))
+      .catch((error) => console.error(error));
