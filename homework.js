@@ -1,5 +1,8 @@
 // // 1) შექმენით მასივი,რომელიც შეიცავს როგორც დადებით ასევე უარყოფით რიცხვებს.
 // გაფილტრეთ მოცემული მასივი შემდეგ კი დაითვალეთ მხოლოდ დადებითი რიცხვების ჯამი. 
+
+import { threadId } from "worker_threads";
+
 // გამოიყენეთ მასივის filter და reduce მეთოდები.
     const numbers = [7, -3, 90, 11, -11, 45, 0, -999];
     const naturalNumbers1 = numbers.filter(num => num > 0);
@@ -33,34 +36,42 @@
 //   ბრენდი და მოდელი კლასს კონსტრუქტორში გადაეცემა, ხოლო speed კონსტრუქტორში დიფოლტად 
 //   ინიციალიზდება და მისი მნიშვნელობა არის 0.ასევე დიფოლტად ინიციალიზდება motion,რომლის საწყისი 
 //   მნიშვნელობაა “The car is not moving”.
-      class Car {
-        constructor(brand, model, speed) {
-          this.brand = brand;
-          this.model = model;
-          this.speed = speed;
-          this.motion = '';
-        }
-      }
-// // კლასს უნდა ჰქონდეს შემდეგი მეთოდები:
+class Car {
+  constructor(brand, model, speed) {
+    this.brand = brand;
+    this.model = model;
+    this.speed = 0;
+    this.motion = '';
+  }
 
-// // check_motion - მანქანის სიჩქარის მიხედვით ცვლის motion ცვლადს: თუ მანქანა მოძრაობს-”მანქანა მოძრაობს”,
-// წინააღმდეგ შემთხვევაში- “მანქანა გაჩერებულია”.
-      function check_motion() {
-        if (this.speed>0){
-          this.motion = `car is moving`;
-        } else {
-          this.motion = `the car isn't moving`;
-        }
-      }
-// // accelerate - იღებს პარამეტრად სიჩქარეს და მანქანის სიჩქარეს ზრდის შესაბამისი მნიშვნელობით.
-// // brake - იღებს პარამეტრად სიჩქარეს და მანქანის სიჩქარეს ამცირებს შესაბამისი მნიშვნელობით
-// (გაითვალისწინეთ,რომ გადაცემული სიჩქარე არსებულ სიჩქარეს შეიძლება აღემატებოდეს).
-// // emergency_brake - ავტომატურად ხდის მანქანის სიჩქარეს 0-ს.
-// // status - ფუნქცია,რომელიც აბრუნებს შემდეგ სტრინგს:
-// //  მანქანა ${ბრენდის სახელი} ${მოდელი} მოძრაობს ${მანქანის სიჩქარე} კმ/სთ სიჩქარით და სტატუსია: ${motion}.
-// // მაგალითად: მანქანა Ford Mustang მოძრაობს 80 კმ/სთ სიჩქარით და სტატუსია: მანქანა მოძრაობს
-// // მითითება: ფუნქცია check_motion უნდა გამოიძახებოდეს accelerate,brake და emergency_brake ფუნქციებში,
-//  რათა motion ცვლადი სწორად ასახავდეს მანქანის სტატუსს.
+  check_motion() {
+    if (this.speed > 0) {
+      this.motion = `car is moving`;
+    } else {
+      this.motion = `the car isn't moving`;
+    }
+  }
+
+  accelerate(speed) {
+    this.speed += speed;
+    this.check_motion();
+  }
+
+  brake(speed) {
+    this.speed = Math.max(0, this.speed - speed);
+    this.check_motion();
+  }
+
+  emergency_brake() {
+    this.speed = 0;
+    this.check_motion();
+  }
+
+  Status() {
+    return `${this.brand} ${this.model} is moving at ${this.speed} km/h and status is ${this.motion}`;
+  }
+}
+    
 // // ჩაატარეთ სხვადასხვა ოპერაციები მანქანაზე (accelerate,brake და ა.შ) და თითოეული ცვლილების შემდეგ
 //  კონსოლში გამოიტანეთ სტატუსი.
 
